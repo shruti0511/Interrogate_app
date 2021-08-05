@@ -1,0 +1,27 @@
+ {% comment %} {% for que in othersQuestions %}
+    <br>
+    <h3>{{que.question}}</h3>
+    <h6>{{que.user}}</h6>
+    {% for answer in que.answer_set.all %} 
+        {{ answer.answer }}
+        <br>
+    {% endfor %}  {% endcomment %}
+<a data-toggle="collapse" href="#ansCollapse{{que.sno}}" role="button" aria-expanded="false" aria-controls="ansCollapse{{que.sno}}">
+    <i class="fas fa-edit" area-hidden="true"></i>Add Answer
+    <span class="sr-only">(current)</span>
+</a>
+
+<div class="collapse multi-collapse" id="ansCollapse{{que.sno}}" tabindex="-1">
+    <div class="card card-body">
+        <form method="post" action="{% url 'addAnswers' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <input class="form-control" type="text" id="answer" name="answer" placeholder="Add your answer here...">
+                <input type="hidden" name="queSno" value="{{que.sno}}">
+            </div>
+            <button type="submit" class="btn btn-primary">Post</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="collapse" data-toggle="collapse" href="#ansCollapse{{que.sno}}" role="button" aria-expanded="false" aria-controls="ansCollapse{{que.sno}}">Close</button>
+        </form>
+    </div>
+</div>
+ {% comment %} {% endfor %} {% endcomment %}

@@ -1,0 +1,48 @@
+{% extends 'authBase.html' %}
+
+
+{% block title %}
+    Topics
+{% endblock title %}
+
+{% block head %}
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/checkTopic.css ' %}">
+{% endblock head %}
+
+{% block content %}
+    
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form action="{% url 'topics' %}" method="post">
+            {% csrf_token %}
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel">Choose Intrested Topics</h3>
+                </div>
+                <ul class="cat">
+                    {% for topic in allTopics %}
+                        {% if topic in myTopics %}
+                            <li class="cat-list">
+                                <input type="checkbox" id="cb{{topic.topic_id}}" name="topics" value="{{topic.topic_id}}" checked/>
+                                <label for="cb{{topic.topic_id}}" class="cat-label"><img class="rounded"src="{{topic.image.url }}" />
+                                    <div class="cat-name">{{topic.topic}}</div>
+                                </label>
+                            </li>
+                        {% else %}
+                            <li class="cat-list">
+                                <input type="checkbox" id="cb{{topic.topic_id}}" name="topics" value="{{topic.topic_id}}"/>
+                                <label for="cb{{topic.topic_id}}" class="cat-label"><img class="rounded"src="{{topic.image.url }}" />
+                                    <div class="cat-name">{{topic.topic}}</div>
+                                </label>
+                            </li>
+                        {% endif %}
+                   
+                    {% endfor %}
+                </ul>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-dark">Follow Topics</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

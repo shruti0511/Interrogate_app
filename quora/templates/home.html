@@ -1,0 +1,56 @@
+{% extends 'base.html' %} {% load static %} {% block title %} Interrogate {% endblock title %} {% block head %}
+<style>
+    .list-group-flush>.active {
+        background-color: grey;
+        border: none;
+    }
+    
+    .sidebar {
+        position: fixed;
+    }
+</style>
+{% endblock head %} {% block content %}
+
+
+
+<div class="container row">
+    <div class="col-3">
+        <!-- List group -->
+        <div class="list-group list-group-flush" id="myList" role="tablist">
+            <a class="list-group-item list-group-item-action" data-toggle="list" href="#all" role="tab" style="display:hidden; opacity: 0;"></a>
+            {% for topic in myTopics %}
+            <a class="list-group-item list-group-item-action" data-toggle="list" href="#{{topic.topic_id}}" role="tab">{{topic.topic}}</a> {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-9">
+        <div class="tab-content">
+            <div class="tab-pane active" id="all" role="tabpanel">
+                {% for que in allQuestions %} {% include 'cardHome.html' %} {% endfor %}
+
+            </div>
+
+            {% for topic in myTopics %}
+            <div class="tab-pane" id="{{topic.topic_id}}" role="tabpanel">
+                {% for que in allQuestions %} {% for queTopic in que.queTopics.all %} {% if queTopic.topic_id == topic.topic_id %} {% include 'cardHome.html' %} {% endif %} {% endfor %} {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% comment %} <textarea name="Text1" id="editor1" rows="4" cols="5"></textarea>
+<textarea name="Text2" id="editor2"></textarea>
+<textarea name="Text3" id="editor3"></textarea>
+<textarea name="Text4" id="editor4"></textarea>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="//cdn.ckeditor.com/4.9.2/full/ckeditor.js"></script>
+
+<script>
+    CKEDITOR.replace('editor1');
+    CKEDITOR.replace('editor2');
+    CKEDITOR.replace('editor3');
+    CKEDITOR.replace('editor4');
+</script>
+{% endcomment %} {% endblock content %}

@@ -1,0 +1,69 @@
+{% extends 'authBase.html' %} 
+
+{% load static %}
+
+{% block title %}
+    SignUp
+{% endblock title %}
+
+{% block head %}
+    <style>
+        body{
+            background-image: url('{% static 'img/background-img.jpg' %}');
+            background-size: cover;
+        }
+        .form-control,
+        .btn {
+                border-radius: 1em;
+        }
+    </style>
+{% endblock head %}
+
+{% block content %}
+<div class="container mt-4" style="width:400px;">
+    <h1 style="text-align:center; color:#4b3a26;">Interrogate</h1>
+        <hr>
+        <div class="ml-2">
+            <h4 style="text-align:left;">Create a new Account</h4>
+            <h5><b style="color:red;">{{error}}</b></h5><br>
+        </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group mr-2">
+            {% comment %} <label for="username"><strong>UserName : </strong></label> {% endcomment %}
+            <input type="text" id="username" class="form-control" name="username" placeholder="Your Username" required>
+        </div>
+
+        <div class="form-group mr-2">
+            {% comment %} <label for="password1"><strong>Password : </strong></label> {% endcomment %}
+            <input type="password" id="password1" class="form-control" name="password1" placeholder="Create a strong Password" required>
+        </div>
+        <div class="form-group mr-2">
+            {% comment %} <label for="password2"><strong>Confirm Password : </strong></label> {% endcomment %}
+            <input type="password" id="password2" class="form-control" name="password2" placeholder="Confirm your Password" required>
+        </div>
+        <div class="form-group mr-2">
+            {% comment %} <label for="email"><strong>Email : </strong></label> {% endcomment %}
+            <input type="text" id="email" class="form-control" name="email" placeholder="Your Email-Id" required>
+        </div>
+        <div class="form-group mr-2">
+            {% comment %} <label for="first_name"><strong>First Name : </strong></label> {% endcomment %}
+            <input type="text" id="fname" class="form-control" name="fname" placeholder="Your First name" required>
+        </div>
+        <div class="form-group mr-2">
+            {% comment %} <label for="last_name"><strong>Last Name : </strong></label> {% endcomment %}
+            <input type="text" id="lname" class="form-control" name="lname" placeholder="Your Last name">
+
+        </div>
+
+        <div class="my-4" style="text-align:left;">
+            <button type="submit" class="btn btn-dark" >SignUp</button>
+        </div>
+       
+         <p>Already have an account? click
+            <a href="{% url 'LoginUSER' %}" style="color: black;;"> <u>here</u></a> to logIn
+        </p>
+    </form>
+</div>
+<br><br> {% endblock %}

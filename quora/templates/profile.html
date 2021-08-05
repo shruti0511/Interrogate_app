@@ -1,0 +1,250 @@
+{% extends 'base.html' %} 
+{% load static %} 
+
+{% block title %}
+    Profile
+{% endblock title %}
+
+{% block head %}
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<link rel="stylesheet" href="{% static 'css/checkTopic.css ' %}">
+<style>
+    .pro {
+        color: grey;
+    }
+    
+    .pro:hover {
+        color: black;
+    }
+    
+    .start {
+        color: red;
+        border-bottom: 2px solid red;
+    }
+    
+    .addData:hover {
+        text-decoration: underline;
+    }
+    
+    .img-contain {
+        position: relative;
+    }
+    
+    .img-contain .imgEdit {
+        opacity: 0;
+        position: absolute;
+        top: 70%;
+        left: 40%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+    }
+    .img-contain:hover .userImg {
+        opacity: 0.2;
+    }
+
+    .img-contain:hover .imgEdit {
+        opacity: 1;
+    }
+</style>
+{% endblock head %} 
+
+{% block content %}
+    <div class="row m-3">
+        <div class="col-md-8">
+            <div class="card mb-4 mt-2">
+                <div class="card-body">
+                    <div class="media">
+                        <div class="img-contain">
+                            <img src="{{ profile.userImage.url }}" class="align-self-start mr-3 rounded userImg" alt="{{ profile.userImage.url }}" style="width:100%px;  max-width:200px; height:100%; max-height:150px; ">
+                            <form method="post" action="{% url 'changeProfile' %}" enctype="multipart/form-data" id="imgForm">
+                                {% csrf_token %}
+                                <i class="fas fa-camera imgEdit"></i>
+                                <input type="file" name="img" id="img" class="autosubmit" style="display:none;" onchange="this.form.submit()">
+                                </form>
+                        </div>
+                        <div class="media-body">
+                            <h2 class="mt-4"><b>{{user.first_name}} {{user.last_name}}</b></h2>
+                            {% if user.profile.description == '' %}
+                            <a class="addData" data-toggle="collapse" href="#{{user}}" role="button" aria-expanded="false" aria-controls="{{user}}">
+                                    Write description about yourself
+                                </a>
+                            <div class="collapse multi-collapse" id="{{user}}" tabindex="-1">
+                                <div class="card card-body">
+                                    <form method="post" action="{% url 'ProfileUSER' %}">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <textarea class="form-control" type="text" id="description" name="description" placeholder="Enter your description here..." required cols="5" rows="5"></textarea>
+                                        </div>
+                                        <button name="des" type="submit" class="btn btn-primary">Update</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="collapse" data-toggle="collapse" href="#{{user}}" role="button" aria-expanded="false" aria-controls="{{user}}">Close</button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="editDescription">
+                                {{user.profile.description}}
+                                <a class="btn_edit" data-toggle="modal" data-target="#exampleModalCenter" href="" role="button" style="color:grey; display:none;">
+                                    <u>Edit</u>
+                                </a>
+                            </div>
+
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav pt-2" style="border-top:1px solid lightgrey; border-bottom:1px solid lightgrey">
+                <li class="nav-item">
+                    <a class="nav-link start pro" href="#topics">{{myTopics.count}} Following</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  pro" href="#answers">{{myAnswers.count}} Answers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pro" href="#questions">{{myQuestions.count}} Questions</a>
+                </li>
+            </ul>
+            <div class="container p-2">
+                <div class="nav-content answers">{% include 'linkAnswer.html' %}</div>
+                <div class="nav-content questions">{% include 'linkQuestion.html' %}</div>
+                <div class="nav-content topics">{% include 'linkTopics.html' %}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" style="border:none;">
+                <div class="card-header" style="background-color:white;">
+                    <h4>Credentials
+                        <i class="fas fa-pen" data-toggle="modal" data-target="#exampleModalCenter" href="" role="button" style="float:right;"></i></h4>
+                </div>
+                <div class="card-body">
+                    {% if user.profile.employment == '' %}
+                    <a class="addData" data-toggle="collapse" href="#{{user}}employment" role="button" aria-expanded="false" aria-controls="{{user}}employment">
+                        <h6><i class="fas fa-briefcase m-1"></i> Add employment credential
+                        </h6>
+                    </a>
+                    <div class="collapse multi-collapse" id="{{user}}employment" tabindex="-1">
+                        <div class="card card-body">
+                            <form method="post" action="{% url 'ProfileUSER' %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input class="form-control" type="text" id="employment" name="employment" placeholder="Enter your employment here..." required>
+                                </div>
+                                <button name="emp" type="submit" class="btn btn-primary">Update</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="collapse" data-toggle="collapse" href="#{{user}}employment" role="button" aria-expanded="false" aria-controls="{{user}}employment">Close</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% else %}
+                    <h6 class="data m-1"><i class="fas fa-briefcase m-1"></i> Employee at {{user.profile.employment}}
+                    </h6>
+                    {% endif %} {% if user.profile.school == '' %}
+                    <a class="addData" data-toggle="collapse" href="#{{user}}education" role="button" aria-expanded="false" aria-controls="{{user}}education">
+                        <h6><i class="fas fa-briefcase m-1"></i> Add education credential
+                        </h6>
+                    </a>
+                    <div class="collapse multi-collapse" id="{{user}}education" tabindex="-1">
+                        <div class="card card-body">
+                            <form method="post" action="{% url 'ProfileUSER' %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input class="form-control" type="text" id="education" name="education" placeholder="Enter your education here..." required>
+                                </div>
+                                <button name="edu" type="submit" class="btn btn-primary">Update</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="collapse" data-toggle="collapse" href="#{{user}}education" role="button" aria-expanded="false" aria-controls="{{user}}education">Close</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% else %}
+                    <h6 class="data m-1"><i class="fas fa-user-graduate m-1"></i> Studied at {{user.profile.school}}
+                    </h6>
+                    {% endif %}
+                    <h6 class="data m-1"><i class="fas fa-calendar-day m-1"></i> Joined {{user.date_joined.date}}
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Credentials</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        {% if user.profile.description == '' %}
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <textarea class="form-control" id="description" name="description" placeholder="Enter your description here..." cols="5" rows="3"></textarea>
+                        </div>
+                        {% else %}
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <textarea class="form-control" id="description" name="description" cols="5" rows="3">{{user.profile.description}}</textarea> {% comment %} <input class="form-control" type="text" id="description" name="description" value={{user.profile.description}}>                        {% endcomment %}
+                        </div>
+                        {% endif %} {% if user.profile.employment == '' %}
+                        <div class="form-group">
+                            <label for="employment">Employment:</label>
+                            <input class="form-control" type="text" id="employment" name="employment">
+                        </div>
+                        {% else %}
+                        <div class="form-group">
+                            <label for="employment">Employment:</label>
+                            <input class="form-control" type="text" id="employment" name="employment" value={{user.profile.employment}}>
+                        </div>
+                        {% endif %} {% if user.profile.school == '' %}
+                        <div class="form-group">
+                            <label for="education">Education:</label>
+                            <input class="form-control" type="text" id="education" name="education">
+                        </div>
+                        {% else %}
+                        <div class="form-group">
+                            <label for="education">Education:</label>
+                            <input class="form-control" type="text" id="education" name="education" value={{user.profile.school}}>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" name="edit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var $content = $('.nav-content');
+
+        function showContent(type) {
+            $content.hide().filter('.' + type).show();
+        }
+
+        $('.nav').on('click', '.pro', function(e) {
+            showContent(e.currentTarget.hash.slice(1));
+            e.preventDefault();
+            $('.pro').css('color', 'grey');
+            $('.pro').css('border-bottom', 'none');
+            $(this).css('color', 'red');
+            $(this).css('border-bottom', '2px solid red');
+        });
+        showContent('topics');
+
+        $(".editDescription").on("mouseenter", function() {
+                $(".btn_edit").show();
+            })
+        .on("mouseleave", function() {
+            $(".btn_edit").hide();
+        });
+
+        $(".imgEdit").click(function () {
+            $("input[type='file']").trigger('click');
+        });
+
+    </script>
+{% endblock content %}

@@ -1,0 +1,16 @@
+<ul class="list-group list-group-flush">
+     <li class="list-group-item">
+        <h4>{{questions.count}} Questions from 
+        {% if profile.user == user %}
+            you
+            <button class="btn btn-dark" data-toggle="modal" data-target="#addQuestionModel" style="float:right;">Add Question</button>
+        {% else %}
+            {{profile.user.first_name}}
+        {% endif %}
+            
+        </h4>
+    </li>
+    {% for que  in questions %}
+           {% include 'cardHome.html' %}
+    {% endfor %}
+</ul>

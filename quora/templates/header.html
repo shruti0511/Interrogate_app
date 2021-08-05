@@ -1,0 +1,106 @@
+{% comment %}
+<header> {% endcomment %}
+{% load static %}
+    <nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'quoraHome' %}">
+            <h3>Interrogate</h3>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <!-- HOME -->
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'quoraHome' %}">
+                        <i class="fa fa-home btn btn-dark ml-1 my-1" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Home"></i>
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <!-- ANSWER -->
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'addAnswers' %}">
+                        <i class="fas fa-edit btn btn-dark ml-0 my-1" area-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Add Answers"></i>
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <form class="form-inline" action={% url 'search' %}>
+                        {% csrf_token %}
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                        <button class="btn btn-outline-dark ml-2 my-1" type="submit">Search</button>
+                    </form>
+                </li>
+                {% if user.is_authenticated%}
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <button class="btn btn-dark ml-2 my-1" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <!--Profile-->
+                            <a class="dropdown-item" href="{% url 'ProfileUSER' %}">
+                                <h3>{{user}} <i class="fa fa-angle-right" aria-hidden="true" style="color:grey"></i></h3>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'addAnswers' %}">Add Answers</a>
+                            <div class="dropdown-divider"></div>
+
+                            <form action="{% url 'LogoutUSER' %}" method="post" id="logout_form">
+                                {% csrf_token %}
+                                <a class="dropdown-item" href="#"><button type="submit" style="border:none; background-color:white;">Logout</button></a>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-dark ml-2 my-1" data-toggle="modal" data-target="#addQuestionModel">Add Question</button>
+                </li>
+                <li class="nav-item">
+
+                </li>
+            </ul>
+            {% else %}
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'LoginUSER'%}">Login/Signup</a>
+                </li>
+            </ul>
+            {% endif %}
+
+        </div>
+    </nav>
+    {% comment %} </header> {% endcomment %}
+
+<!-- Add question Modal -->
+<div class="modal fade" id="addQuestionModel" tabindex="-1" role="dialog" aria-labelledby="exampaddQuestionModel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Question</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'addQuestion' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <h5><label for="topics" class="form-label">Choose topics for your question:</label></h5>
+                        <span><small>(Press ctrl key and select topics)</small></span>
+                        <select class="form-control mb-2" multiple aria-label="multiple select example" name='queTopics' id='queTopics'>
+                            {% for topic in allTopics %}
+                                <option value="{{topic.topic_id}}">{{topic.topic}}</option>
+                            {% endfor %}
+                        </select>
+                        <input class="form-control" type="text" id="question" name="question" placeholder="enter your question here...">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

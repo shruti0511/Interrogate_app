@@ -1,0 +1,45 @@
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">
+        <h4>{{answers.count}} Answers from 
+        {% if profile.user == user %}
+            you
+            <a href="{% url 'addAnswers' %}"><button class="btn btn-dark" style="float:right;">Add Answers</button></a>
+        {% else %}
+            {{profile.user.first_name}}
+        {% endif %}
+            
+        </h4>
+    </li>
+    {% for ans in answers %} 
+
+    <div class="card m-2">
+        <div class="card-body">
+            <div class="media">
+                <a href="{% url 'othersProfile' ans.question.user.username%}" target="_blank">
+                    <img class="rounded-circle mr-3" src="{{ans.question.user.profile.userImage.url}}" alt="..." width="50px" height="50px">
+                </a>
+                <div class="media-body">
+                    <h4 class="mt-0">{{ans.question.user}}</h4>
+
+                    
+                    {% if ans.question.user.profile.employment == '' and ans.question.user.profile.school == ''%}
+                    <h6></h6>
+                    {% elif ans.question.user.profile.employment == '' %}
+                        <h6 style="color: grey;">Student at {{ans.question.user.profile.school}}</h6>
+                    {% else %}
+                        <h6 style="color: grey;">Employee at {{ans.question.user.profile.employment}}</h6>
+                    {% endif %}
+
+                </div>
+            </div>
+            <h4><u><b>{{ans.question.question}}</b></u></h4>
+            <small style="color: grey;">Created at {{ans.question.timestamp}}</small>
+
+            <div class="content mb-1">
+                <h6>{{ans.answer |safe}}</h6>
+            
+            <a href="{% url 'questionDetail' ans.question.sno %}">(More Answers)</a></div>
+        </div>
+    </div>
+    {% endfor %}
+</ul>

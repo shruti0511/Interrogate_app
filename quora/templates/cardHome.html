@@ -1,0 +1,38 @@
+{% load static %}
+<div class="card m-2">
+    <div class="card-body">
+        <div class="media">
+            <a href="{% url 'othersProfile' que.user.username%}" target="_blank">
+                <img class="rounded-circle mr-3" src="{{que.user.profile.userImage.url}}" alt="..." width="50px" height="50px" style="overflow:hidden">
+            </a>
+            <div class="media-body">
+                <h4 class="mt-0">{{que.user}}</h4>
+                {% if que.user.profile.employment == '' and que.user.profile.school == ''%}
+                <h6></h6>
+                {% elif que.user.profile.employment == '' %}
+                <h6 style="color: grey;">Student at {{que.user.profile.school}}</h6>
+                {% else %}
+                <h6 style="color: grey;">Employee at {{que.user.profile.employment}}</h6>
+                {% endif %}
+
+            </div>
+        </div>
+        <a href="{% url 'questionDetail' que.sno %}" style="color:black;">
+            <h5><u><b>{{que.question}}</b></u></h5>
+        </a>
+        <small style="color: grey;">Created at {{que.timestamp}}</small> {% if que.status == 0 %}
+        <h6 style="color:grey;">No answer yet</h6>
+        {% else %}
+        <h6>{{ que.answer_set.first.answer | truncatechars:250 |safe }} <a href="{% url 'questionDetail' que.sno %}">(more answers)</a></h6>
+        {% endif %}
+
+        <a href="{% url 'questionDetail' que.sno %}">
+            <i class="fas fa-edit" area-hidden="true"></i>Add Answer
+        </a>
+
+        <div class="tags mt-2">
+            <b>Tags: </b> {% for topic in que.queTopics.all %}
+            <span class="badge badge-dark m-1">{{ topic.topic }}</span> {% endfor %}
+        </div>
+    </div>
+</div>

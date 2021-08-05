@@ -1,0 +1,131 @@
+{% extends 'base.html' %} 
+{% load static %} 
+
+{% block title %}
+    {{ profile }}
+{% endblock title %}
+
+{% block head %}
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<link rel="stylesheet" href="{% static 'css/checkTopic.css ' %}">
+<style>
+    .pro {
+        color: grey;
+    }
+    
+    .pro:hover {
+        color: black;
+    }
+    
+    .start {
+        color: red;
+        border-bottom: 2px solid red;
+    }
+    
+    .addData:hover {
+        text-decoration: underline;
+    }
+    
+    
+</style>
+{% endblock head %} 
+
+{% block content %}
+    <div class="row m-3">
+        <div class="col-md-8">
+            <div class="card mb-4 mt-2">
+                <div class="card-body">
+                    <div class="media">
+                        <div class="img-contain">
+                            <img src="{{ profile.userImage.url }}" class="align-self-start mr-3 rounded userImg" alt="{{ profile.userImage.url }}" style="width:100%px;  max-width:200px; height:100%; max-height:150px; ">
+                        </div>
+                        <div class="media-body">
+                            <h2 class="mt-4"><b>{{profile.user.first_name}} {{profile.user.last_name}}</b></h2>
+                            {% if user.profile.description == '' %}
+
+                            {% else %}
+                            <div class="editDescription">
+                                {{profile.user.profile.description}}
+                            </div>
+
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav pt-2" style="border-top:1px solid lightgrey; border-bottom:1px solid lightgrey">
+                <li class="nav-item">
+                    <a class="nav-link start pro" href="#topics">{{myTopics.count}} Following</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  pro" href="#answers">{{myAnswers.count}} Answers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link pro" href="#questions">{{myQuestions.count}} Questions</a>
+                </li>
+            </ul>
+            <div class="container p-2">
+                <div class="nav-content answers">{% include 'linkAnswer.html' %}</div>
+                <div class="nav-content questions">{% include 'linkQuestion.html' %}</div>
+                <div class="nav-content topics">{% include 'linkTopics.html' %}</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" style="border:none;">
+                <div class="card-header" style="background-color:white;">
+                    <h4>Credentials
+                </div>
+                <div class="card-body">
+                    {% if profile.user.profile.employment == '' %}
+                        
+                    {% else %}
+                    <h6 class="data m-1"><i class="fas fa-briefcase m-1"></i> Employee at {{profile.user.profile.employment}}
+                    </h6>
+                    {% endif %} 
+                    
+                    {% if profile.user.profile.school == '' %}
+                    
+                    {% else %}
+                    <h6 class="data m-1"><i class="fas fa-user-graduate m-1"></i> Studied at {{profile.user.profile.school}}
+                    </h6>
+                    {% endif %}
+
+                    <h6 class="data m-1"><i class="fas fa-calendar-day m-1"></i> Joined {{profile.user.date_joined.date}}
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Credentials</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var $content = $('.nav-content');
+
+        function showContent(type) {
+            $content.hide().filter('.' + type).show();
+        }
+
+        $('.nav').on('click', '.pro', function(e) {
+            showContent(e.currentTarget.hash.slice(1));
+            e.preventDefault();
+            $('.pro').css('color', 'grey');
+            $('.pro').css('border-bottom', 'none');
+            $(this).css('color', 'red');
+            $(this).css('border-bottom', '2px solid red');
+        });
+        showContent('topics');
+
+    </script>
+{% endblock content %}
