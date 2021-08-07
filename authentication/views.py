@@ -86,6 +86,7 @@ def topics(request):
         context = {'allTopics' : allTopics,'myTopics':myTopics}
         return render(request,'topics.html',context)
 
+@login_required
 def ProfileUSER(request):
     context ={}
     if request.method == "POST": 
@@ -145,6 +146,7 @@ def changeProfile(request):
         profile.save()
         return redirect('ProfileUSER')
 
+@login_required
 def othersProfile(request,username):
     user = User.objects.get(username = username)
     userProfile  = Profile.objects.get(user = user)
@@ -154,7 +156,17 @@ def othersProfile(request,username):
     context = {'profile': userProfile, 'answers':userAnswers, 'questions': userQue, 'topics': userTopics}
     return render(request,'othersProfile.html',context)      
 
+def deleteAns(request,sno):
+    answer = Answer.objects.get(sno = sno)
+    answer.delete()
+    messages.success(request,'Your answer has been deleted successfully!!!')
+    return redirect(request.META.get('HTTP_REFERER'))
 
+def deleteQue(request,sno):
+    question = Question.objects.get(sno = sno).delete()
+    messages.success(request,'Your question has been deleted successfully!!!')
+    return redirect(request.META.get('HTTP_REFERER'))
+    
 
 
 

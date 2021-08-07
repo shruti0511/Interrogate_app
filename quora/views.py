@@ -81,5 +81,6 @@ def search(request):
      if request.method == 'GET':
         search = request.GET.get('search')
         questions = Question.objects.filter( Q(question__icontains=search) | Q(queTopics__topic__icontains=search) | Q(user__username__icontains = search))
+        # questions = Question.objects.filter( question__icontains=search , queTopics__topic__icontains=search,user__username__icontains = search)
         context = {'searchQuestions' : questions}
         return render(request,'search.html',context)

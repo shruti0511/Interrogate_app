@@ -3,7 +3,7 @@
         <h4>{{questions.count}} Questions from 
         {% if profile.user == user %}
             you
-            <button class="btn btn-dark" data-toggle="modal" data-target="#addQuestionModel" style="float:right;">Add Question</button>
+            <button class="btn btn-dark" data-toggle="modal" data-target="#addQuestionModel" style="float:right;">Add New Question</button>
         {% else %}
             {{profile.user.first_name}}
         {% endif %}
@@ -11,6 +11,30 @@
         </h4>
     </li>
     {% for que  in questions %}
-           {% include 'cardHome.html' %}
+            <div class="card m-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-10"><h4><u><b>{{que.question}}</b></u></h4></div>
+                        {% if que.user == user %}
+                            <div class="col-2"><a href="{% url 'deleteQue' que.sno %}" class="btn btn-sm btn-danger" style="float:right; color:white;">Delete</a></div>
+                        {% endif %}
+                    </div>
+                    
+                    <small style="color: grey;">Created at {{que.timestamp}}</small> {% if que.status == 0 %}
+                    <h6 style="color:grey;">No answer yet</h6>
+                    {% else %}
+                    <h6>{{ que.answer_set.first.answer | truncatechars:250 |safe }} <a href="{% url 'questionDetail' que.sno %}">(more answers)</a></h6>
+                    {% endif %}
+
+                    <a href="{% url 'questionDetail' que.sno %}">
+                        <i class="fas fa-edit" area-hidden="true"></i>Add Answer
+                    </a>
+
+                    <div class="tags mt-2">
+                        <b>Tags: </b> {% for topic in que.queTopics.all %}
+                        <span class="badge badge-dark m-1">{{ topic.topic }}</span> {% endfor %}
+                    </div>
+                </div>
+            </div>
     {% endfor %}
 </ul>

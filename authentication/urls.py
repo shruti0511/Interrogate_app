@@ -12,6 +12,8 @@ urlpatterns = [
     path("profile/",views.ProfileUSER,name="ProfileUSER"),
     path("topics/",views.topics,name="topics"),
     path("changeProfile/",views.changeProfile,name="changeProfile"),
+    path("delAns<int:sno>/",views.deleteAns,name="deleteAns"),
+    path("delQue<int:sno>/",views.deleteQue,name="deleteQue"),
     path("<str:username>/",views.othersProfile,name="othersProfile"),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

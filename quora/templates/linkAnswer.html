@@ -35,10 +35,18 @@
             <h4><u><b>{{ans.question.question}}</b></u></h4>
             <small style="color: grey;">Created at {{ans.question.timestamp}}</small>
 
-            <div class="content mb-1">
-                <h6>{{ans.answer |safe}}</h6>
-            
-            <a href="{% url 'questionDetail' ans.question.sno %}">(More Answers)</a></div>
+            <div class="content row mb-1">
+                <div class="col-10">
+                    <h6 class="answerDes">{{ans.answer |safe}}</h6>
+                    <a href="{% url 'questionDetail' ans.question.sno %}">(More Answers)</a>
+                </div>
+                {% if ans.user == user %}
+                    <div class="col-2 answerBtn">
+                        <a href="{% url 'deleteAns' ans.sno %}" class="btn btn-sm btn-danger" style="float:right;color:white;">Delete</a>
+                    </div>
+                {% endif %}
+                
+            </div>
         </div>
     </div>
     {% endfor %}
