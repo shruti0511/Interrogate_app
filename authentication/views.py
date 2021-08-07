@@ -145,7 +145,7 @@ def changeProfile(request):
         profile.userImage = request.FILES["img"]
         profile.save()
         return redirect('ProfileUSER')
-
+        
 @login_required
 def othersProfile(request,username):
     user = User.objects.get(username = username)
@@ -157,8 +157,7 @@ def othersProfile(request,username):
     return render(request,'othersProfile.html',context)      
 
 def deleteAns(request,sno):
-    answer = Answer.objects.get(sno = sno)
-    answer.delete()
+    answer = Answer.objects.get(sno = sno).delete()
     messages.success(request,'Your answer has been deleted successfully!!!')
     return redirect(request.META.get('HTTP_REFERER'))
 
