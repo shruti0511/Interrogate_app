@@ -1,12 +1,5 @@
-from quora.forms import addAnswer
-from authentication.views import topics
-from django.http import response
 from django.contrib import messages
-from django.http.response import HttpResponse
-from quora.models import Answer, Question, quoraTopic
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
-from django.urls.conf import include
+from quora.models import Answer, Question
 from authentication.models import Profile
 from django.shortcuts import redirect, render
 from django.db.models import Q

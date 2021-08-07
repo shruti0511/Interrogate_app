@@ -1,8 +1,6 @@
 from django.contrib import messages
-from django.http.response import HttpResponse
 from quora.models import  Answer, Question, quoraTopic
 from django.shortcuts import render,redirect
-from django.shortcuts import get_object_or_404
 from .forms import UserProfile
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
@@ -73,7 +71,7 @@ def LogoutUSER(request):
         return redirect('LoginUSER')
 
 
-@login_required
+@login_required(login_url="/")
 def topics(request):
     context = {}
     if request.method == "POST":
@@ -86,7 +84,7 @@ def topics(request):
         context = {'allTopics' : allTopics,'myTopics':myTopics}
         return render(request,'topics.html',context)
 
-@login_required
+@login_required(login_url="/")
 def ProfileUSER(request):
     context ={}
     if request.method == "POST": 
@@ -146,7 +144,7 @@ def changeProfile(request):
         profile.save()
         return redirect('ProfileUSER')
         
-@login_required
+@login_required(login_url="/")
 def othersProfile(request,username):
     user = User.objects.get(username = username)
     userProfile  = Profile.objects.get(user = user)
